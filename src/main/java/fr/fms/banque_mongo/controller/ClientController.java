@@ -1,9 +1,14 @@
 package fr.fms.banque_mongo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.fms.banque_mongo.model.Client;
 import fr.fms.banque_mongo.repository.ClientRepository;
+
+import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +22,20 @@ public class ClientController {
     // Le repository permet d'accéder à MongoDB
     private final ClientRepository clientRepository;
 
+    private final MongoTemplate mongoTemplate;
+
+    private final Environment environment;
+
     // Constructeur : Spring injecte automatiquement le repository ici
-    public ClientController(ClientRepository clientRepository) {
+    public ClientController(ClientRepository clientRepository, MongoTemplate mongoTemplate, Environment environment) {
         this.clientRepository = clientRepository;
+        this.mongoTemplate = mongoTemplate;
+        this.environment = environment;
     }
 
     // GET /api/clients
     // Cette méthode retourne tous les clients
-    @GetMapping("/all")
+    @GetMapping
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
@@ -34,6 +45,26 @@ public class ClientController {
     @GetMapping("/debug/count")
     public long countClients() {
         return clientRepository.count();
+    }
+
+    // GET /api/clients/debug
+    // Cette route montre ce que Spring voit réellement dans MongoDB
+    @GetMapping("/debug")
+    public Map<String, Object> debugMongo() {
+        Map<String, Object> debug = new HashMap<>();
+
+        String mongoUri = environment.getProperty("spring.data.mongodb.uri");
+
+        debug.put("databaseName", mongoTemplate.getDb().getName());
+        debug.put("collections", mongoTemplate.getCollectionNames());
+        debug.put("repositoryCount", clientRepository.count());
+        debug.put("rawClientsCount", mongoTemplate.getCollection("clients").countDocuments());
+
+        debug.put("databaseProperty", environment.getProperty("spring.data.mongodb.database"));
+        debug.put("mongoUriPresent", mongoUri != null);
+        debug.put("mongoUriContainsBanqueTp", mongoUri != null && mongoUri.contains("/banque_tp"));
+
+        return debug;
     }
 
     // GET /api/clients/{id}
