@@ -1,0 +1,42 @@
+@startuml TP_Bank
+
+class Client {
+  - id : String
+  - nom : String
+  - email : String
+  - telephone : String
+}
+
+class CompteBancaire {
+  - id : String
+  - numeroCompte : String
+  - typeCompte : String
+  - solde : double
+  - clientId : String
+}
+
+abstract class Operation {
+  - id : String
+  - type : String
+  - montant : double
+  - dateOperation : Date
+  - compteId : String
+  - description : String
+}
+
+class Depot
+
+class Retrait
+
+class Virement {
+  - compteSourceId : String
+  - compteDestinataireId : String
+}
+
+Client "1" -- "1..*" CompteBancaire : possède
+CompteBancaire "1" -- "0..*" Operation : possède
+Operation <|-- Depot
+Operation <|-- Retrait
+Operation <|-- Virement
+
+@enduml

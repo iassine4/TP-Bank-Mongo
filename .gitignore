@@ -1,0 +1,85 @@
+# .gitignore pour projet Spring Boot (Maven)
+
+# Build output
+target/
+build/
+out/
+
+# Maven wrapper (jar may be committed in some projects)
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Packages
+*.jar
+*.war
+*.ear
+
+# Generated sources
+generated-sources/
+generated-test-sources/
+
+# Test reports
+surefire-reports/
+failsafe-reports/
+test-outputs/
+
+# Spring Boot devtools
+.restart
+.spring-devtools
+
+# Application runtime copies in target (avoid ignoring source config)
+/target/**/application.properties
+/target/**/application.yml
+
+# Keystores and environment files
+*.jks
+*.keystore
+.env
+.env.*
+
+# IDEs and editors
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated
+.springBeans
+.sts4-cache
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+/.nb-gradle/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Misc
+hs_err_pid*
+
+# Ignore target copies inside source folders only if needed in multi-module setups
+!**/src/main/**/target/
+!**/src/test/**/target/
